@@ -7,18 +7,22 @@ public class TicTacToe {
         char[][] board = new char[3][3];
 
         // initializing the board with empty char
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                board[row][col] = ' ';
-            }
-        }
+        //        for (int row = 0; row < board.length; row++) {
+        //            for (int col = 0; col < board[row].length; col++) {
+        //                board[row][col] = ' ';
+        //            }
+        //        }
+
+        // To make the re-use of the code which is same here for initializing and resetting the board if it is full
+        // THIS METHOD WILL BOTH INITIALIZE AS WELL AS RESET THE BOARD ( RESETTING THE GAME )
+        resetGame(board);
 
         char player = 'X';
         boolean gameOver = false;
 
         while (!gameOver) {
             // Printing the board until now
-            shoeBoard(board);
+            showBoard(board);
 
             // Asking the player to make his move
             System.out.println("Player " + player + " enter your move: ");
@@ -35,19 +39,28 @@ public class TicTacToe {
                     System.out.println("Player " + player + " has won");
                     break;
                 } else {
+                    if(isAllCellsFull(board)){
+                        System.out.println("Tie !! , game will reset now !!");
+                        System.out.println("The player will change.");
+                        resetGame(board);
+                        player = changePlayer(player);
+                        continue;
+                    }
                     // Changing the player
                     // If player is 'X' then change  to 'O' else change to 'X'
-                    player = (player == 'X') ? 'O' : 'X';
+                    // player = (player == 'X') ? 'O' : 'X';
+                    // making the change of player into a function
+                    player = changePlayer(player);
                 }
             } else {
                 System.out.println("Invalid Move");
             }
 
         }
-        shoeBoard(board);
+        showBoard(board);
     }
 
-
+    // THIS METHOD WILL CHECK IF THE PROVIDED PLAYER HAS WON THE GAME OR NOT
     public static boolean hasWonTheGame ( char[][] board, char player){
 
         // Checking in rows
@@ -76,8 +89,8 @@ public class TicTacToe {
         return false;
     }
 
-
-    public static void shoeBoard ( char[][] board){
+    // THIS METHOD WILL DISPLAY THE BOARD
+    public static void showBoard ( char[][] board){
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
@@ -86,6 +99,33 @@ public class TicTacToe {
             System.out.println();
         }
 
+    }
+
+    // THIS METHOD WILL RESET/INITIALIZE THE GAME
+    public static void resetGame(char[][] board){
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                board[row][col] = ' ';
+            }
+        }
+    }
+
+    // THIS METHOD WILL CHECK IF THE BOARD IS FULL AND THE GAME IS TIE
+    public static boolean isAllCellsFull(char[][] board){
+        boolean isfull = true;
+        for(int row = 0; row < board.length; row++){
+            for(int col = 0; col < board[row].length; col++){
+                if(board[row][col] == ' '){
+                    return false;
+                }
+            }
+        }
+        return isfull;
+    }
+
+    // THIS METHOD WILL CHANGE THE CURRENT PLAYER
+    public static char changePlayer(char player){
+        return (player == 'X') ? 'O' : 'X';
     }
 }
 
